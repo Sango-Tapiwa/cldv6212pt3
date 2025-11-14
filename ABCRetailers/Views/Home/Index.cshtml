@@ -1,0 +1,194 @@
+﻿@model HomeViewModel
+@{
+    ViewData["Title"] = "Home";
+}
+
+<div class="jumbotron p-5 rounded mb-5">
+    <h1 class="display-4 fw-bold">Welcome to ABC Retailers</h1>
+    <p class="lead fs-5">Your one-stop shop for quality products at great prices!</p>
+    <hr class="my-4 bg-light" />
+    <p class="fs-6">Browse our collection of premium products and enjoy a seamless shopping experience.</p>
+    <a class="btn btn-light btn-lg fw-bold" asp-controller="Product" asp-action="Index" role="button">
+        <i class="bi bi-bag-check"></i> Shop Now
+    </a>
+</div>
+
+<div class="row mb-5">
+    <div class="col-lg-4 col-md-6 mb-3">
+        <div class="card text-center h-100 border-0 shadow-sm">
+            <div class="card-body py-4">
+                <div class="mb-3">
+                    <i class="bi bi-box-seam" style="font-size: 3rem; color: #0d6efd;"></i>
+                </div>
+                <h3 class="fw-bold text-dark">@Model.ProductCount</h3>
+                <p class="text-muted mb-0">Products Available</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-4 col-md-6 mb-3">
+        <div class="card text-center h-100 border-0 shadow-sm">
+            <div class="card-body py-4">
+                <div class="mb-3">
+                    <i class="bi bi-people" style="font-size: 3rem; color: #198754;"></i>
+                </div>
+                <h3 class="fw-bold text-dark">@Model.CustomerCount</h3>
+                <p class="text-muted mb-0">Happy Customers</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-4 col-md-6 mb-3">
+        <div class="card text-center h-100 border-0 shadow-sm">
+            <div class="card-body py-4">
+                <div class="mb-3">
+                    <i class="bi bi-cart-check" style="font-size: 3rem; color: #0dcaf0;"></i>
+                </div>
+                <h3 class="fw-bold text-dark">@Model.OrderCount</h3>
+                <p class="text-muted mb-0">Orders Completed</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="mb-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="mb-0 fw-bold">Featured Products</h2>
+        <div class="search-container" style="max-width: 300px;">
+            <div class="input-group">
+                <span class="input-group-text bg-light border-end-0">
+                    <i class="bi bi-search"></i>
+                </span>
+                <input type="text" id="searchInput" class="form-control border-start-0" placeholder="Search products..." aria-label="Search products">
+                <button id="clearSearch" class="btn btn-outline-secondary d-none" type="button">
+                    <i class="bi bi-x"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div id="searchResults" class="row">
+        @foreach (var product in Model.FeaturedProducts)
+        {
+            <div class="col-lg-3 col-md-4 col-sm-6 mb-4 product-card" data-product-name="@product.ProductName.ToLower()" data-product-description="@product.Description?.ToLower()">
+                <div class="card h-100 shadow-sm">
+                    <div class="position-relative overflow-hidden product-image-wrapper" style="height: 240px;">
+                        @if (!string.IsNullOrEmpty(product.ImageUrl))
+                        {
+                            <img src="@product.ImageUrl" class="card-img-top product-image" alt="@product.ProductName" onerror="this.parentElement.innerHTML='<div class=\'product-placeholder\'><i class=\'bi bi-image\'></i></div>'" />
+                        }
+                        else
+                        {
+                            <div class="product-placeholder">
+                                <i class="bi bi-image"></i>
+                            </div>
+                        }
+                    </div>
+                    <div class="card-body d-flex flex-column flex-grow-1">
+                        <h5 class="card-title fw-bold">@product.ProductName</h5>
+                        <p class="card-text text-muted small flex-grow-1">@(string.IsNullOrEmpty(product.Description) ? "No description" : product.Description.Length > 80 ? product.Description.Substring(0, 80) + "..." : product.Description)</p>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <h4 class="text-primary mb-0">@product.Price.ToString("C")</h4>
+                            <span class="badge @(product.StockAvailable > 0 ? "bg-success" : "bg-danger")">
+                                @(product.StockAvailable > 0 ? $"{product.StockAvailable}" : "Out")
+                            </span>
+                        </div>
+                    </div>
+                    <div class="card-footer bg-white">
+                        @if (Context.Session.GetString("UserId") != null)
+                        {
+                            <form asp-controller="Cart" asp-action="AddToCart" method="post" class="d-inline">
+                                <input type="hidden" name="productId" value="@product.Id" />
+                                <input type="hidden" name="quantity" value="1" />
+                                <button type="submit" class="btn btn-primary w-100" @(product.StockAvailable == 0 ? "disabled" : "")>
+                                    <i class="bi bi-cart-plus"></i> Add to Cart
+                                </button>
+                            </form>
+                        }
+                        else
+                        {
+                            <a asp-controller="Login" asp-action="Index" class="btn btn-outline-primary w-100">
+                                Login to Purchase
+                            </a>
+                        }
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+
+    <div id="noProductsMessage" class="alert alert-info d-none">
+        <i class="bi bi-info-circle"></i> No products found matching your search criteria.
+    </div>
+
+    @if (!Model.FeaturedProducts.Any())
+    {
+        <div class="alert alert-info">
+            <i class="bi bi-info-circle"></i> No products available at the moment. Please check back later.
+        </div>
+    }
+</div>
+
+@section Scripts {
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const searchInput = document.getElementById('searchInput');
+            const clearSearch = document.getElementById('clearSearch');
+            const productCards = document.querySelectorAll('.product-card');
+            const noProductsMessage = document.getElementById('noProductsMessage');
+            const searchResults = document.getElementById('searchResults');
+
+            function performSearch() {
+                const searchTerm = searchInput.value.toLowerCase().trim();
+                let visibleCount = 0;
+
+                productCards.forEach(card => {
+                    const productName = card.getAttribute('data-product-name');
+                    const productDescription = card.getAttribute('data-product-description');
+
+                    const matchesName = productName.includes(searchTerm);
+                    const matchesDescription = productDescription && productDescription.includes(searchTerm);
+
+                    if (searchTerm === '' || matchesName || matchesDescription) {
+                        card.style.display = 'block';
+                        visibleCount++;
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+
+                // Show/hide no products message
+                if (visibleCount === 0 && searchTerm !== '') {
+                    noProductsMessage.classList.remove('d-none');
+                    searchResults.classList.add('d-none');
+                } else {
+                    noProductsMessage.classList.add('d-none');
+                    searchResults.classList.remove('d-none');
+                }
+
+                // Show/hide clear button
+                if (searchTerm !== '') {
+                    clearSearch.classList.remove('d-none');
+                } else {
+                    clearSearch.classList.add('d-none');
+                }
+            }
+
+            // Search input event
+            searchInput.addEventListener('input', performSearch);
+
+            // Clear search button
+            clearSearch.addEventListener('click', function () {
+                searchInput.value = '';
+                performSearch();
+                searchInput.focus();
+            });
+
+            // Clear search with Escape key
+            searchInput.addEventListener('keydown', function (e) {
+                if (e.key === 'Escape') {
+                    searchInput.value = '';
+                    performSearch();
+                }
+            });
+        });
+    </script>
+}

@@ -1,0 +1,59 @@
+﻿@model List<Order>
+@{
+    ViewData["Title"] = "Order Confirmation";
+}
+
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-body text-center py-5">
+                <i class="bi bi-check-circle text-success" style="font-size: 5rem;"></i>
+                <h1 class="mt-3">Order Confirmed!</h1>
+                <p class="lead">Thank you for your purchase</p>
+                <hr class="my-4" />
+
+                <h4 class="mb-3">Order Summary</h4>
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Order ID</th>
+                                <th>Product</th>
+                                <th>Quantity</th>
+                                <th>Total</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var order in Model)
+                            {
+                                <tr>
+                                    <td><code>@order.Id</code></td>
+                                    <td>@order.ProductName</td>
+                                    <td>@order.Quantity</td>
+                                    <td>@order.TotalAmount.ToString("C")</td>
+                                    <td><span class="badge bg-info">@order.Status</span></td>
+                                </tr>
+                            }
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <td colspan="3" class="text-end"><strong>Grand Total:</strong></td>
+                                <td colspan="2"><strong class="text-success">@Model.Sum(o => o.TotalAmount).ToString("C")</strong></td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+
+                <div class="mt-4">
+                    <a asp-controller="Order" asp-action="MyOrders" class="btn btn-primary me-2">
+                        <i class="bi bi-list-check"></i> View My Orders
+                    </a>
+                    <a asp-controller="Home" asp-action="Index" class="btn btn-outline-secondary">
+                        <i class="bi bi-house"></i> Back to Home
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,64 @@
+﻿@model List<Order>
+@{
+    ViewData["Title"] = "My Orders";
+}
+
+<h1 class="mb-4"><i class="bi bi-list-check"></i> My Orders</h1>
+
+@if (Model.Any())
+{
+    <div class="row">
+        @foreach (var order in Model)
+        {
+            <div class="col-md-6 mb-4">
+                <div class="card">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <span><strong>Order ID:</strong> <code>@order.Id.Substring(0, 12)...</code></span>
+                        @{
+                            var badgeClass = order.Status switch
+                            {
+                                OrderStatus.Submitted => "bg-info",
+                                OrderStatus.Processing => "bg-warning",
+                                OrderStatus.Processed => "bg-success",
+                                OrderStatus.Cancelled => "bg-danger",
+                                _ => "bg-secondary"
+                            };
+                        }
+                        <span class="badge @badgeClass">@order.Status</span>
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title">@order.ProductName</h5>
+                        <div class="row">
+                            <div class="col-6">
+                                <p class="mb-1"><strong>Quantity:</strong> @order.Quantity</p>
+                                <p class="mb-1"><strong>Unit Price:</strong> @order.UnitPrice.ToString("C")</p>
+                            </div>
+                            <div class="col-6">
+                                <p class="mb-1"><strong>Total:</strong> @order.TotalAmount.ToString("C")</p>
+                                <p class="mb-1"><strong>Date:</strong> @order.OrderDateUtc.ToString("MMM dd, yyyy")</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <a asp-action="Details" asp-route-id="@order.Id" class="btn btn-sm btn-info">
+                            <i class="bi bi-eye"></i> View Details
+                        </a>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+}
+else
+{
+    <div class="card">
+        <div class="card-body text-center py-5">
+            <i class="bi bi-cart-x text-muted" style="font-size: 5rem;"></i>
+            <h3 class="mt-3">No orders yet</h3>
+            <p class="text-muted">Start shopping to see your orders here!</p>
+            <a asp-controller="Product" asp-action="Index" class="btn btn-primary mt-3">
+                <i class="bi bi-bag-check"></i> Browse Products
+            </a>
+        </div>
+    </div>
+}

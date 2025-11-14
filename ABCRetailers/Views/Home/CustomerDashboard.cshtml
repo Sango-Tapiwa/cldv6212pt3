@@ -1,0 +1,63 @@
+﻿@model ABCRetailers.Models.ViewModels.HomeViewModel
+@{
+    ViewData["Title"] = "Customer Dashboard";
+}
+
+<div class="jumbotron bg-light p-5 rounded mb-4">
+    <h1 class="display-4">Welcome back, @Context.Session.GetString("Username")!</h1>
+    <p class="lead">Browse our products and manage your orders</p>
+    <hr class="my-4" />
+    <div class="row">
+        <div class="col-md-4 mb-3">
+            <a class="btn btn-primary btn-lg w-100" asp-controller="Product" asp-action="Index">
+                <i class="bi bi-bag-check"></i> Browse Products
+            </a>
+        </div>
+        <div class="col-md-4 mb-3">
+            <a class="btn btn-success btn-lg w-100" asp-controller="Cart" asp-action="Index">
+                <i class="bi bi-cart3"></i> View Cart
+            </a>
+        </div>
+        <div class="col-md-4 mb-3">
+            <a class="btn btn-info btn-lg w-100" asp-controller="Order" asp-action="MyOrders">
+                <i class="bi bi-list-check"></i> My Orders
+            </a>
+        </div>
+    </div>
+</div>
+
+<h2 class="mb-4">Featured Products</h2>
+<div class="row">
+    @foreach (var product in Model.FeaturedProducts)
+    {
+        <div class="col-md-3 mb-4">
+            <div class="card h-100">
+                @if (!string.IsNullOrEmpty(product.ImageUrl))
+                {
+                    <img src="@product.ImageUrl" class="card-img-top product-image" alt="@product.ProductName" />
+                }
+                else
+                {
+                    <div class="card-img-top product-image bg-secondary d-flex align-items-center justify-content-center">
+                        <i class="bi bi-image text-white" style="font-size: 3rem;"></i>
+                    </div>
+                }
+                <div class="card-body">
+                    <h5 class="card-title">@product.ProductName</h5>
+                    <p class="card-text text-muted small">@product.Description</p>
+                    <h4 class="text-primary">@product.Price.ToString("C")</h4>
+                    <p class="text-muted small">Stock: @product.StockAvailable</p>
+                </div>
+                <div class="card-footer bg-white">
+                    <form asp-controller="Cart" asp-action="AddToCart" method="post">
+                        <input type="hidden" name="productId" value="@product.Id" />
+                        <input type="hidden" name="quantity" value="1" />
+                        <button type="submit" class="btn btn-primary w-100" @(product.StockAvailable == 0 ? "disabled" : "")>
+                            <i class="bi bi-cart-plus"></i> Add to Cart
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    }
+</div>

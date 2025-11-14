@@ -1,0 +1,78 @@
+﻿@model ABCRetailers.Models.ViewModels.HomeViewModel
+@{
+    ViewData["Title"] = "Admin Dashboard";
+}
+
+<h1 class="mb-4"><i class="bi bi-speedometer2"></i> Admin Dashboard</h1>
+
+<div class="row mb-4">
+    <div class="col-md-3">
+        <div class="card text-white bg-primary">
+            <div class="card-body text-center">
+                <i class="bi bi-box-seam" style="font-size: 3rem;"></i>
+                <h3 class="mt-3">@Model.ProductCount</h3>
+                <p>Total Products</p>
+                <a asp-controller="Product" asp-action="Index" class="btn btn-light btn-sm">Manage</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-white bg-success">
+            <div class="card-body text-center">
+                <i class="bi bi-people" style="font-size: 3rem;"></i>
+                <h3 class="mt-3">@Model.CustomerCount</h3>
+                <p>Total Customers</p>
+                <a asp-controller="Customer" asp-action="Index" class="btn btn-light btn-sm">Manage</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-white bg-info">
+            <div class="card-body text-center">
+                <i class="bi bi-cart-check" style="font-size: 3rem;"></i>
+                <h3 class="mt-3">@Model.OrderCount</h3>
+                <p>Total Orders</p>
+                <a asp-controller="Order" asp-action="Manage" class="btn btn-light btn-sm">Manage</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-white bg-warning">
+            <div class="card-body text-center">
+                <i class="bi bi-cloud-upload" style="font-size: 3rem;"></i>
+                <h3 class="mt-3">Uploads</h3>
+                <p>File Management</p>
+                <a asp-controller="Upload" asp-action="Index" class="btn btn-light btn-sm">Manage</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header">
+                <h4><i class="bi bi-list-task"></i> Quick Actions</h4>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-4 mb-3">
+                        <a asp-controller="Product" asp-action="Create" class="btn btn-primary w-100">
+                            <i class="bi bi-plus-circle"></i> Add New Product
+                        </a>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <a asp-controller="Order" asp-action="Create" class="btn btn-success w-100">
+                            <i class="bi bi-plus-circle"></i> Create New Order
+                        </a>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <a asp-controller="Order" asp-action="Manage" class="btn btn-info w-100">
+                            <i class="bi bi-gear"></i> Manage Order Status
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
