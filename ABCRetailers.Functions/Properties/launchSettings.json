@@ -1,0 +1,11 @@
+{
+  "profiles": {
+    "ABCRetailers.Functions": {
+      "commandName": "Project",
+      "commandLineArgs": "--port 7225",
+      "environmentVariables": {
+        "FUNCTIONS_WORKER_GRPC_URI": "http://127.0.0.1:7225"
+      }
+    }
+  }
+}
