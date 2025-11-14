@@ -7806,11 +7806,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\lab_services_student\\Desktop\\ABCRetailers\\ABCRetailers.csproj",
+      "projectUniqueName": "C:\\Users\\lab_services_student\\Desktop\\cldv6212pt3\\ABCRetailers\\ABCRetailers.csproj",
       "projectName": "ABCRetailers",
-      "projectPath": "C:\\Users\\lab_services_student\\Desktop\\ABCRetailers\\ABCRetailers.csproj",
+      "projectPath": "C:\\Users\\lab_services_student\\Desktop\\cldv6212pt3\\ABCRetailers\\ABCRetailers.csproj",
       "packagesPath": "C:\\Users\\lab_services_student\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\lab_services_student\\Desktop\\ABCRetailers\\obj\\",
+      "outputPath": "C:\\Users\\lab_services_student\\Desktop\\cldv6212pt3\\ABCRetailers\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
